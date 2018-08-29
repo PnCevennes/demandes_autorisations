@@ -1,34 +1,51 @@
+'''
+    Route permettant la visualisation des bilans concernant
+    les autorisations et les rapports de constatations
+'''
+
 from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request, flash
+    render_template,
+    Blueprint, request
 )
 from sqlalchemy import text
 
 from app.env import db, SUB_Q, QUERY, COLUMNS, QUERY_CONST
+
+
 route = Blueprint('autorisations', __name__)
+
 
 @route.route('/', methods=['GET', 'POST'])
 def get_stat_autorisations():
+    '''
+        Route bilan des autorisations
+    '''
     subquery = SUB_Q
-    
+
     filters = []
-    
+
     if "date-min" in request.form:
         if request.form['date-min']:
-           filters.append("a.d_ar_dossier_complet >= '" + request.form["date-min"] + "'")
-    
+            filters.append(
+                "a.d_ar_dossier_complet >= '" + request.form["date-min"] + "'"
+            )
+
     if "date-max" in request.form:
         if request.form['date-max']:
-           filters.append("a.d_ar_dossier_complet <= '" + request.form["date-max"] + "'")
-    
+            filters.append(
+                "a.d_ar_dossier_complet <= '" + request.form["date-max"] + "'"
+            )
+
     if filters:
         subquery = subquery + " WHERE " + " AND ".join(filters)
-    
-    (selected_columns, sql_select, sql_group_by) = process_columns(request.form.getlist('columns'))
+
+    (
+        selected_columns, sql_select, sql_group_by
+    ) = process_columns(request.form.getlist('columns'))
 
     sql_c = text(QUERY.format(subquery, "", ""))
     result_c = db.engine.execute(sql_c)
-    
+
     sql_a = text(QUERY.format(subquery, sql_select, sql_group_by))
     result_a = db.engine.execute(sql_a)
     return render_template(
@@ -47,7 +64,7 @@ def get_constatations():
     '''
     sql_c = text(QUERY_CONST)
     result_c = db.engine.execute(sql_c)
-    
+
     return render_template(
         'constatations.html',
         data=result_c,
@@ -56,16 +73,21 @@ def get_constatations():
 
 
 def process_columns(form_columns):
+    '''
+        Traitement des colonnes demandées par l'utilisateur
+    '''
     selected_columns = COLUMNS
 
     if not form_columns:
-        form_columns = [k for k in selected_columns if selected_columns[k]['checked']]
+        form_columns = [
+            k for k in selected_columns if selected_columns[k]['checked']
+        ]
 
     for col in selected_columns:
         if col in form_columns:
-            selected_columns[col]['checked']=True
+            selected_columns[col]['checked'] = True
         else:
-            selected_columns[col]['checked']=False
+            selected_columns[col]['checked'] = False
 
     check_col = [k for k in selected_columns if selected_columns[k]['checked']]
     if check_col:
@@ -76,4 +98,3 @@ def process_columns(form_columns):
         sql_group_by = ""
 
     return (selected_columns, sql_select, sql_group_by)
-

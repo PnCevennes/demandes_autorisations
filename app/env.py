@@ -1,13 +1,18 @@
-
+'''
+    Variables utilisées par l'ensemble de l'application
+'''
 from flask_sqlalchemy import SQLAlchemy
 
-from config import config
 
 """
-Création de la base avec sqlalchemy
+    Création de la base avec sqlalchemy
 """
 
 db = SQLAlchemy()
+
+"""
+    Requetes utilisées par l'application
+"""
 
 SUB_Q = """
  SELECT a.id, a.num_dossier,
@@ -18,7 +23,7 @@ SUB_Q = """
             a.type_demande,
             a.d_ar_refus,
             COALESCE(a.d_reponse::text, a.lien_reponse::text, a.num_document_reponse::text) AS rep,
-            a.avis_interne, 
+            a.avis_interne,
             p.nom_complet as nom_petitionnaire,
             instructeur, type_reponse
            FROM autorisations.suivi_autorisations a
@@ -44,7 +49,7 @@ QUERY = """
 """
 
 COLUMNS = {
-    "massif": {"checked": True, "label": "Massif"}, 
+    "massif": {"checked": True, "label": "Massif"},
     "thematique": {"checked": True, "label": "Thematique"},
     "objet": {"checked": True, "label": "Objet"},
     "type_demande": {"checked": True, "label": "Type de demande"},
@@ -53,12 +58,11 @@ COLUMNS = {
     "instructeur": {"checked": False, "label": "Instructeur"},
     "num_dossier": {"checked": False, "label": "Num dossier"},
     "type_reponse": {"checked": False, "label": "Type de réponse"}
-    
 }
 
 QUERY_CONST = """
-    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation, 
-        suites_donnees, date_cloture, regularisation, date_regularisation, 
+    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation,
+        suites_donnees, date_cloture, regularisation, date_regularisation,
         code_insee, nom_communes
     FROM autorisations.constatations c
     LEFT OUTER JOIN autorisations.v_petitionnaires p
@@ -67,8 +71,8 @@ QUERY_CONST = """
 
 
 QUERY_DATE_AT = """
-    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation, 
-        suites_donnees, date_cloture, regularisation, date_regularisation, 
+    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation,
+        suites_donnees, date_cloture, regularisation, date_regularisation,
         code_insee, nom_communes
     FROM autorisations.constatations c
     LEFT OUTER JOIN autorisations.v_petitionnaires p

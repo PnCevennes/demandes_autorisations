@@ -8,11 +8,12 @@ sudo -s supervisorctl stop taxhub
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
   cp config/config.py.sample config/config.py
+
+  echo "préparation du fichier config.py..."
+  sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$db_port\/$db_name\"/" config/config.py
+
+
 fi
-
-echo "préparation du fichier config.py..."
-sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$db_port\/$db_name\"/" config/config.py
-
 
 #installation des librairies
 cd static/

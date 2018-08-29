@@ -1,7 +1,8 @@
 config/config.py
 config/settings.ini
 
-# editor .vscode
+# editor
+.vscode
 
 # Javascript
 static/nodes_modules/*

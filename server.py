@@ -1,16 +1,32 @@
-import os
-import sys
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+'''
+    Application permettant de visualiser les demandes
+    d'autorisations réalisées sur le territoire
+'''
 
-from flask_compress import Compress
+from flask import Flask
 
 from app.env import db
 
 from config import config
 
-class ReverseProxied(object):
 
+class ReverseProxied(object):
+    '''Wrap the application in this middleware and configure the
+    front-end server to add these headers, to let you quietly bind
+    this to a URL other than / and to an HTTP scheme that is
+    different than what is used locally.
+
+    In nginx:
+    location /myprefix {
+        proxy_pass http://192.168.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Script-Name /myprefix;
+        }
+
+    :param app: the WSGI application
+    '''
     def __init__(self, app, script_name=None, scheme=None, server=None):
         self.app = app
         self.script_name = script_name
@@ -33,7 +49,6 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
-print(config.URL_APPLICATION)
 app = Flask(
     __name__,
     template_folder="templates",
