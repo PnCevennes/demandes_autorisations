@@ -1,0 +1,34 @@
+
+app_name=autorisation
+
+
+####################################
+###config PostgreSQL
+####################################
+
+#effacer la base de donnée existante lors de l'installation
+drop_apps_db=true
+
+#host hébergeant la base de données
+db_host=localhost
+
+#port de la base de données
+db_port=5432
+
+#nom de la base de données de l'application
+db_name=suivi_autorisations
+
+#nom de l'utilisateur propriétaire de la base PostgreSQL
+user_pg=monuser
+
+#user propriétaire de la base geonaturedb
+user_pg_pass=monpass
+
+####################################
+###config Gunicorn
+####################################
+gun_num_workers=4
+gun_host=0.0.0.0
+gun_port=5555
+python_path=/usr/bin/python3
+venv_dir=venv
