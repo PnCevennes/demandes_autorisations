@@ -1,3 +1,14 @@
+config/config.py
+config/settings.ini
+
+# editor .vscode
+
+# Javascript
+static/nodes_modules/*
+
+#logs
+var/log/*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

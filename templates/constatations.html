@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <h1>Suivis des constations délivrées</h1>
+        <div class="card">
+                <table id="results_group" class="display table table-striped table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                                {% for col in columns %}
+                                        <th>{{col}}</th>
+                                {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in data %}
+                        <tr> 
+                                {% for cel in row%} 
+                                        <td>{{cel}}</td>
+                                {% endfor%}
+                        </tr>
+                        {% endfor%}
+                        </tbody>
+                        <tfoot>
+                        <tr >
+                                {% for col in columns %}
+                                        <th>{{col}}</th>
+                                {% endfor %}
+                        </tr>
+                        </tfoot>
+                </table>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Setup - add a text input to each footer cell
+            $('#results_group tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Filtre '+title+'" />' );
+            } );
+            
+            var table = $('#results_group').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'colvis' 
+                ]
+            });
+    
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+        
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        });
+    </script>
+    
+{% endblock %}
