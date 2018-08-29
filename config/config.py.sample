@@ -8,3 +8,4 @@ database_connection = "postgresql://user:monpassachanger@IPADRESSE:5432/database
 
 DEBUG=True
 PORT=5555
+URL_APPLICATION="http://localhost:5555"
