@@ -22,6 +22,7 @@ SUB_Q = """
             a.objet,
             a.type_demande,
             a.d_ar_refus,
+            a.nature,
             COALESCE(a.d_reponse::text, a.lien_reponse::text, a.num_document_reponse::text) AS rep,
             a.avis_interne,
             p.nom_complet as nom_petitionnaire,
@@ -49,15 +50,16 @@ QUERY = """
 """
 
 COLUMNS = {
-    "massif": {"checked": True, "label": "Massif"},
-    "thematique": {"checked": True, "label": "Thematique"},
-    "objet": {"checked": True, "label": "Objet"},
-    "type_demande": {"checked": True, "label": "Type de demande"},
-    "annee": {"checked": True, "label": "Année"},
-    "nom_petitionnaire": {"checked": False, "label": "Nom petitionnaire"},
-    "instructeur": {"checked": False, "label": "Instructeur"},
-    "num_dossier": {"checked": False, "label": "Num dossier"},
-    "type_reponse": {"checked": False, "label": "Type de réponse"}
+    "massif": {"order": 1, "checked": True, "label": "Massif"},
+    "thematique": {"order": 2, "checked": True, "label": "Thematique"},
+    "objet": {"order": 3, "checked": True, "label": "Objet"},
+    "nature": {"order": 4, "checked": False, "label": "Nature"},
+    "type_demande": {"order": 5, "checked": True, "label": "Type de demande"},
+    "annee": {"order": 6, "checked": True, "label": "Année"},
+    "nom_petitionnaire": {"order": 7, "checked": False, "label": "Nom petitionnaire"},
+    "instructeur": {"order": 8, "checked": False, "label": "Instructeur"},
+    "num_dossier": {"order": 9, "checked": False, "label": "Num dossier"},
+    "type_reponse": {"order": 10, "checked": False, "label": "Type de réponse"}
 }
 
 QUERY_CONST = """
