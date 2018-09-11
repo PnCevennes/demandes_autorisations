@@ -65,7 +65,7 @@ COLUMNS = {
 QUERY_CONST = """
     SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation,
         suites_donnees, date_cloture, regularisation, date_regularisation,
-        code_insee, nom_communes
+        code_insee, nom_communes, massif, meta_create_date::date
     FROM autorisations.constatations c
     LEFT OUTER JOIN autorisations.v_petitionnaires p
     ON p.id = c.auteur
