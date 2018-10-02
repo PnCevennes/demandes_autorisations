@@ -63,20 +63,17 @@ COLUMNS = {
 }
 
 QUERY_CONST = """
-    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation,
-        suites_donnees, date_cloture, regularisation, date_regularisation,
-        code_insee, nom_communes, massif, meta_create_date::date
+    SELECT c.id, num_rapport,  p.nom_complet as auteur, referent,
+        c.thematique, type_constatation, date_constatation,
+        suites_donnees, nature_constatation,
+        type_arbitage, d_rapport_manquement,
+        d_mise_demeure, sat.num_dossier as num_autorisation, type_procedure,
+        date_cloture, date_regularisation,
+        c.nom_communes, c.massif, c.meta_create_date::date
     FROM autorisations.constatations c
     LEFT OUTER JOIN autorisations.v_petitionnaires p
     ON p.id = c.auteur
-"""
-
-
-QUERY_DATE_AT = """
-    SELECT massif, p.nom_complet, referent, num_rapport, nature_constatation,
-        suites_donnees, date_cloture, regularisation, date_regularisation,
-        code_insee, nom_communes
-    FROM autorisations.constatations c
-    LEFT OUTER JOIN autorisations.v_petitionnaires p
-    ON p.id = c.auteur
+    LEFT OUTER JOIN autorisations.suivi_autorisations sat
+    ON sat.id = c.id_autorisation
+    ORDER BY c.id DESC
 """
