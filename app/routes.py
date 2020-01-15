@@ -9,7 +9,7 @@ from flask import (
 )
 from sqlalchemy import text
 
-from app.env import db, SUB_Q, QUERY, COLUMNS, QUERY_CONST
+from app.env import db, SUB_Q, SUB_Q_SPLIT_MASSIFS, QUERY, COLUMNS, QUERY_CONST
 
 
 route = Blueprint('autorisations', __name__)
@@ -46,6 +46,8 @@ def get_stat_autorisations():
     sql_c = text(QUERY.format(subquery, "", ""))
     result_c = db.engine.execute(sql_c)
 
+
+    subquery = SUB_Q_SPLIT_MASSIFS
     sql_a = text(QUERY.format(subquery, sql_select, sql_group_by))
     result_a = db.engine.execute(sql_a)
     return render_template(

@@ -16,6 +16,23 @@ db = SQLAlchemy()
 
 SUB_Q = """
  SELECT a.id, a.num_dossier,
+            date_part('YEAR'::text, a.d_ar_dossier_complet)::int AS annee,
+            a.thematique,
+            a.objet,
+            a.type_demande,
+            a.d_ar_refus,
+            a.nature,
+            COALESCE(a.d_reponse::text, a.lien_reponse::text, a.num_document_reponse::text) AS rep,
+            a.avis_interne,
+            p.nom_complet as nom_petitionnaire,
+            instructeur, type_reponse
+           FROM autorisations.suivi_autorisations a
+           JOIN autorisations.v_petitionnaires p
+           ON a.petitionnaire = p.id
+"""
+
+SUB_Q_SPLIT_MASSIFS = """
+ SELECT a.id, a.num_dossier,
             regexp_split_to_table(a.massif::text, ','::text) AS massif,
             date_part('YEAR'::text, a.d_ar_dossier_complet)::int AS annee,
             a.thematique,
@@ -38,8 +55,8 @@ QUERY = """
         )
  SELECT row_number() OVER () AS unique_id,
     {}
-    count(*) AS nb_demandes,
-    count(*) - count(data.rep) AS nb_en_cours,
+    count(DISTINCT data.id) AS nb_demandes,
+    count(DISTINCT data.id) - count(data.rep) AS nb_en_cours,
     count(data.rep) AS nb_reponse,
     count(data.d_ar_refus) AS nb_refus,
     count(data.avis_interne) FILTER (WHERE data.avis_interne::text = 'Favorable'::text) AS avis_int_favorable,
