@@ -45,10 +45,15 @@ def get_stat_autorisations():
         selected_columns, sql_select, sql_group_by
     ) = process_columns(request.form.getlist('columns'))
 
+    # Statistiques
     sql_c = text(QUERY.format(subquery, "", ""))
     result_c = db.engine.execute(sql_c)
 
-    sql_a = text(QUERY.format(subquery_massifs, sql_select, sql_group_by))
+    # Tableau des résulats
+    # Si la colonne massifs est spécifiée alors changement de sous requête
+    if ("massif" in request.form.getlist('columns')):
+        subquery = subquery_massifs
+    sql_a = text(QUERY.format(subquery, sql_select, sql_group_by))
     result_a = db.engine.execute(sql_a)
     return render_template(
         'stat_autorisation.html',
@@ -79,7 +84,7 @@ def process_columns(form_columns):
         Traitement des colonnes demandées par l'utilisateur
     '''
     selected_columns = COLUMNS
-
+    print(form_columns)
     if not form_columns:
         form_columns = [
             k for k in selected_columns if selected_columns[k]['checked']
@@ -98,5 +103,5 @@ def process_columns(form_columns):
     else:
         sql_select = ""
         sql_group_by = ""
-
+    print(selected_columns, sql_select, sql_group_by)
     return (selected_columns, sql_select, sql_group_by)
