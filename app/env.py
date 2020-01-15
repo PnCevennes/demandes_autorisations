@@ -55,8 +55,8 @@ QUERY = """
         )
  SELECT row_number() OVER () AS unique_id,
     {}
-    count(DISTINCT data.id) AS nb_demandes,
-    count(DISTINCT data.id) - count(data.rep) AS nb_en_cours,
+    count(data.id) AS nb_demandes,
+    count(data.id) - count(data.rep) AS nb_en_cours,
     count(data.rep) AS nb_reponse,
     count(data.d_ar_refus) AS nb_refus,
     count(data.avis_interne) FILTER (WHERE data.avis_interne::text = 'Favorable'::text) AS avis_int_favorable,
