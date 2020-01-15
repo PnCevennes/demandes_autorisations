@@ -21,6 +21,7 @@ def get_stat_autorisations():
         Route bilan des autorisations
     '''
     subquery = SUB_Q
+    subquery_massifs = SUB_Q_SPLIT_MASSIFS
 
     filters = []
 
@@ -38,6 +39,7 @@ def get_stat_autorisations():
 
     if filters:
         subquery = subquery + " WHERE " + " AND ".join(filters)
+        subquery_massifs = subquery_massifs  + " WHERE " + " AND ".join(filters)
 
     (
         selected_columns, sql_select, sql_group_by
@@ -46,9 +48,7 @@ def get_stat_autorisations():
     sql_c = text(QUERY.format(subquery, "", ""))
     result_c = db.engine.execute(sql_c)
 
-
-    subquery = SUB_Q_SPLIT_MASSIFS
-    sql_a = text(QUERY.format(subquery, sql_select, sql_group_by))
+    sql_a = text(QUERY.format(subquery_massifs, sql_select, sql_group_by))
     result_a = db.engine.execute(sql_a)
     return render_template(
         'stat_autorisation.html',
